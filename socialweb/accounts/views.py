@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from djago.views.generic import CreateView
+from django.views.generic import CreateView
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 
