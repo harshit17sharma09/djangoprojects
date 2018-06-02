@@ -8,6 +8,7 @@ class UserCreateForm(UserCreationForm):
 
 
     def __init__(self,*args,**kwargs):
-         super().__init__(*args,**kwargs)
+        #  context = super(UserCreateForm, self).get_context_data(**kwargs)
+         super(UserCreateForm,self).__init__(*args,**kwargs)
          self.fields['username'].label = 'Display Name' #label 
          self.fields['email'].label = 'Email Address'      
