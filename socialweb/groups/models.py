@@ -9,7 +9,7 @@ import misaka
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from djnago import template
+from django import template
 register = template.Library()
 
 class Group(models.Model):

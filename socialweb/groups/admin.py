@@ -5,7 +5,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from . import import models
+from . import models
 
 class GroupMemberInline(admin.TabularInline):
     model = models.GroupMember
