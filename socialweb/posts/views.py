@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse_lazy
 
 from django.http import Http404
 from django.views import generic
+# from django.views.generic import DetailView
 
 from braces.views import SelectRelatedMixin  #install braces pip install django-braces
 
@@ -19,7 +20,7 @@ User = get_user_model()
 
 
 class PostList(SelectRelatedMixin,generic.ListView):
-    model = models.PostList
+    model = models.Post
     select_related = ('user','group')  
 
 
@@ -41,7 +42,7 @@ class UserPost(generic.ListView):
         context['post_user'] = self.post_user
         return context
 
-class PostDetail(SelectRelatedMixin,generic.Detailview):
+class PostDetail(SelectRelatedMixin,generic.DetailView):
     model = models.Post
     select_related = ('user','group')  #connecting foregin key       
 
@@ -50,7 +51,7 @@ class PostDetail(SelectRelatedMixin,generic.Detailview):
         queryset = super().get_queryset()
         return queryset.filter(user__username__iexact=self.kwargs.get('username')) 
 
-class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.Createview):
+class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.CreateView):
 
     fields = ('messgae','group')
     model = models.Post
@@ -61,7 +62,7 @@ class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.Createview):
         self.object.save()
         return super().form_valid(form)
 
-class DeletePost(LoginRequiredMixin,SelectRelatedMixin,generic.Deleteview):
+class DeletePost(LoginRequiredMixin,SelectRelatedMixin,generic.DeleteView):
     model = models.Post
     select_related = ('user','group')
     success_url = reverse_lazy('posts:all')

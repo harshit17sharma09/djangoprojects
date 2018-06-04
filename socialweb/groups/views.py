@@ -9,9 +9,9 @@ from django.contrib.auth.mixins import (LoginRequiredMixin,PermissionRequiredMix
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.views import generic
-from groups.Models import Group,GroupMember
+from groups.models import Group,GroupMember
 
-class CreateGroup(LoginRequiredMixin,generic.Createview):
+class CreateGroup(LoginRequiredMixin,generic.CreateView):
     fields = ('name','description')
     model = Group
 
@@ -25,7 +25,8 @@ class ListGroups(generic.ListView):
 class JoinGroup(LoginRequiredMixin,generic.RedirectView):
     
     def get_redirect_url(self,*args,**kwargs):
-        return reverse('groups:single' kwargs = {'slug':self.kwargs.get('slug')})
+        # return reverse('groups:single', kwargs={'slug':self.kwargs.get('slug')})
+        return reverse('groups:single', kwargs={'slug':self.slug})
 
     def get(self,request,*args,**kwargs):
         group = get_object_or_404(Group,slug=self.kwargs.get('slug'))
@@ -44,7 +45,8 @@ class JoinGroup(LoginRequiredMixin,generic.RedirectView):
 class LeaveGroup(LoginRequiredMixin,generic.RedirectView):
 
     def get_redirect_url(self,*args,**kwargs):
-        return reverse('groups:single' kwargs = {'slug':self.kwargs.get('slug')})
+        # return reverse('groups:single' kwargs = {'slug':self.kwargs.get('slug')})
+        return reverse('groups:single',kwargs = {'slug':self.slug})
 
     def get(self,request,*args,**kwargs):
         try:
