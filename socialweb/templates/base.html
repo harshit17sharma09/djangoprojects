@@ -30,14 +30,14 @@
                     <a href="{% url 'groups:all' %}">Groups</a>
                 </li>
                 <li>
-                    <a href="#">Create Group</a>
+                    <a href="{% url 'groups:create' %}">Create Group</a>
                 </li>
                 <li>
                     <a href="{% url 'accounts:logout' %}">Log Out</a>
                 </li>
                 {% else %}
                 <li>
-                    <a href="#">Groups</a>
+                    <a href="{% url 'groups:all' %}">Groups</a>
                 </li>
                 <li>
                     <a href="{% url 'accounts:login' %}">Log In</a>

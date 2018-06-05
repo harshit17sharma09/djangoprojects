@@ -5,12 +5,12 @@ from django.shortcuts import render
 from django.contrib import messages
 # Create your views here.
 from django.contrib.auth.mixins import (LoginRequiredMixin,PermissionRequiredMixin)
-
+from django.db import IntegrityError
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from groups.models import Group,GroupMember
-
+from .import models
 class CreateGroup(LoginRequiredMixin,generic.CreateView):
     fields = ('name','description')
     model = Group
@@ -25,8 +25,8 @@ class ListGroups(generic.ListView):
 class JoinGroup(LoginRequiredMixin,generic.RedirectView):
     
     def get_redirect_url(self,*args,**kwargs):
-        # return reverse('groups:single', kwargs={'slug':self.kwargs.get('slug')})
-        return reverse('groups:single', kwargs={'slug':self.slug})
+        return reverse('groups:single', kwargs={'slug':self.kwargs.get('slug')})
+        # return reverse('groups:single', kwargs={'slug':self.slug})
 
     def get(self,request,*args,**kwargs):
         group = get_object_or_404(Group,slug=self.kwargs.get('slug'))
@@ -34,19 +34,19 @@ class JoinGroup(LoginRequiredMixin,generic.RedirectView):
         try:
             GroupMember.objects.create(user=self.request.user,group=group)
         except IntegrityError:
-            messgaes.warning(self.request,'Warning already a member!')
+            messages.warning(self.request,'Warning already a member!')
         else:
             messages.success(self.request,'You are now a member!')
 
 
-        return super().get(request,*args,**kwargs)
+        return super(JoinGroup,self).get(request,*args,**kwargs)
 
 
 class LeaveGroup(LoginRequiredMixin,generic.RedirectView):
 
     def get_redirect_url(self,*args,**kwargs):
         # return reverse('groups:single' kwargs = {'slug':self.kwargs.get('slug')})
-        return reverse('groups:single',kwargs = {'slug':self.slug})
+        return reverse('groups:single',kwargs={'slug':self.kwargs.get('slug')})
 
     def get(self,request,*args,**kwargs):
         try:
@@ -60,5 +60,5 @@ class LeaveGroup(LoginRequiredMixin,generic.RedirectView):
         else:
             membership.delete()
             messages.success(self.request,'You have left thr group!')
-        return super().get(request,*args,**kwargs)
+        return super(LeaveGroup,self).get(request,*args,**kwargs)
            

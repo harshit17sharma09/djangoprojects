@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 import misaka
 
@@ -25,7 +25,7 @@ class Group(models.Model):
     def save(self,*args,**kwargs):
         self.slug = slugify(self.name)
         self.description_html = misaka.html(self.description)
-        super().save(*args,**kwargs)
+        super(Group,self).save(*args,**kwargs)
 
     def get_absolute_url(self):
         return reverse('groups:single',kwargs={'slug':self.slug})
@@ -49,4 +49,4 @@ class GroupMember(models.Model):
 
     
     
-    pass
+    
